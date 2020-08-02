@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include "mul_in_mul_out_nn.c"
+
+#define Happy 0.8
+
+#define SAD_PRED_IDX 0
+#define SICK_PRED_IDX 1
+#define ACTIVE_PRED_IDX 2
+
+#define VECTOR_LEN 3
+
+#define IN_LEN 3
+#define OUT_LEN 3
+
+int main() {
+
+  double _weight[OUT_LEN][IN_LEN] = { {-2, 9.5, 2.01},
+				      {-0.8, 7.2, 6.3},
+				      {-0.5, 0.45, 0.9}
+  };
+  //                       temp hum air_q
+  double _input[IN_LEN] = { 30, 87, 110 };
+  
+  double prediction[3];
+
+  mul_in_mul_out_nn(_input, IN_LEN, prediction, OUT_LEN, _weight);
+
+  printf("Sad prediction : %f\r\n", prediction[SAD_PRED_IDX]);
+  
+  return 0;
+}
+  
