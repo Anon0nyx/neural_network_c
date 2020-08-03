@@ -1,14 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 
-struct {
+typedef struct Data Data;
+
+struct Data{
 
     float **in;
     float **tg;
     int nips;
     int nops;
     int rows;
-}Data;
+};
 
 int lns(FILE *const file) {
 
@@ -29,7 +32,7 @@ int lns(FILE *const file) {
     return lines;
 }
 
-char *readIn(FILE *const file) {
+char * readIn(FILE *const file) {
 
     int ch = EOF;
     int reads = 0;
@@ -40,13 +43,14 @@ char *readIn(FILE *const file) {
         line[reads ++] = ch;
         if (reads + 1 == size) {
             line = (char *)realloc((line), (size *= 2)*sizeof(char));
+        }
     }
 
     line[reads] = '\0';
     return line;
 }
 
-float **new2d(const int rows, const int cols) {
+float ** new2d(const int rows, const int cols) {
 
     float **row = (float**)malloc((rows)*sizeof(float *));
 
@@ -68,11 +72,11 @@ Data ndata(const int nips, const int nops, const int rows) {
     return data;
 }
 
-void parse(cosnt Data data, char *line, const int row) {
+void parse(const Data data, char *line, const int row) {
 
     const int cols = data.nips + data.nops;
     for (int col=0;col<cols;col++) {
-        cont float val = atof(strtok(col == 0 ? line :NULL, " "));
+        const float val = atof(strtok(col == 0 ? line :NULL, " "));
         if (col > data.nips)
             data.in[row][col] = val;
         else
@@ -97,7 +101,7 @@ void shuffle(const Data d) {
         float *ot = d.tg[a];
         float *it = d.in[a];
 
-        d.tg[a] = s.tg[b];
+        d.tg[a] = d.tg[b];
         d.tg[b] = ot;
 
         d.in[a] = d.in[b];
