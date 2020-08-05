@@ -16,7 +16,9 @@ int main() {
 
     const Data data = build("semeion.data", nips, nops);
 
-    const NeuralNetwork_Type nn = NNbuild(nips, nhid, nops);
+    
+
+    /*const NeuralNetwork_Type nn = NNbuild(nips, nhid, nops);
 
     for (int i=0; i < iterations; i++) {
         shuffle(data);
@@ -29,4 +31,5 @@ int main() {
         printf("Error %.12f :: learning rater %f\n", (double)error/data.rows, (double)rate);
         rate += eta;
     }
+    */
 }
