@@ -13,7 +13,7 @@ int main() {
     const int nhid = 28;
     const int iterations = 128;
 
-    const Data data = build ("semeion.data",nips,nops);
+    const Data data = build ("test.data", nips, nops);
 
     const NeuralNetwork_Type nn = NNbuild(nips,nhid,nops);
 

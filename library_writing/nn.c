@@ -82,14 +82,6 @@ float *NNpredict(const NeuralNetwork_Type nn, const float * in) {
 
 NeuralNetwork_Type NNbuild(int nips, int nhid, int nops) {
 
-    float *w;
-    float *x;
-    float *b;
-    float *h;
-    float *o;
-    int nb;
-    int nw;
-
     NeuralNetwork_Type nn;
     nn.nb = 2;
     nn.nw = nhid * (nips + nops);
