@@ -26,18 +26,18 @@ struct NeuralNetwork_Type{
 
 static void fprop(const NeuralNetwork_Type nn, const float *const in) {
 
-    for (int i=0;i<nn.nhid;i++) {
+    for (int i=0; i < nn.nhid; i++) {
         float sum = 0.0f;
-        for (int j=0;j<nn.nips;j++) {
+        for (int j=0; j < nn.nips; j++) {
             sum += in[j] * nn.w[i*nn.nips + j];
         }
         nn.h[i] = act(sum + nn.b[0]);
     }
 
     /* Output layer neuron values */
-    for (int i=0;i<nn.nops;i++) {
+    for (int i=0; i < nn.nops; i++) {
         float sum = 0.0f;
-        for (int j=0;j<nn.nhid;j++) {
+        for (int j=0; j < nn.nhid; j++) {
             sum += nn.h[j] * nn.x[i*nn.nhid + j];
         }
         nn.o[i] = act(sum + nn.b[1]);
@@ -49,27 +49,27 @@ static void bprop(const NeuralNetwork_Type nn,
                     const float *const tg,
                     float rate) {
 
-    for (int i=0;i<nn.nhid;i++) {
+    for (int i=0; i < nn.nhid; i++) {
         float sum = 0.0f;
-        for (int j=0;j<nn.nops;j++) {
+        for (int j=0; j < nn.nops; j++) {
             const float a = pderr(nn.o[j], tg[j]);
             const float b = pdact(nn.o[j]);
 
             sum += a * b * nn.x[j*nn.nhid + i];
-            nn.x[j * nn.nhid + i] -= rate * a * b * nn.h[i];
+            nn.x[ j * nn.nhid + i ] -= rate * a * b * nn.h[i];
         }
-        for (int j=0;j<nn.nips;j++) {
-            nn.w[i * nn.nips + j] -= rate * sum * pdact(nn.h[i]) * in[j];
+        for (int j=0; j < nn.nips; j++) {
+            nn.w[ i * nn.nips + j ] -= rate * sum * pdact(nn.h[i]) * in[j];
         }
     }
 }
 
 static void wbrand(const NeuralNetwork_Type nn) {
 
-    for (int i=0;i<nn.nw;i++) {
+    for (int i=0; i < nn.nw; i++) {
         nn.w[i] = frand() - 0.5f;
     }
-    for (int i=0;i<nn.nb;i++) {
+    for (int i=0; i < nn.nb; i++) {
         nn.b[i] = frand() - 0.5f;
     }
 }
@@ -81,6 +81,14 @@ float *NNpredict(const NeuralNetwork_Type nn, const float * in) {
 }
 
 NeuralNetwork_Type NNbuild(int nips, int nhid, int nops) {
+
+    float *w;
+    float *x;
+    float *b;
+    float *h;
+    float *o;
+    int nb;
+    int nw;
 
     NeuralNetwork_Type nn;
     nn.nb = 2;

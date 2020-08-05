@@ -118,7 +118,6 @@ Data build(const char *path, const int nips, const int nops) {
         exit(1);
     }
     const int rows = lns(file);
-    printf("%d\n", rows);
     Data data = ndata(nips,nops,rows);
 
     for (int row=0;row<rows;row++) {
