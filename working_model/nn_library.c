@@ -79,7 +79,7 @@ static  void wbrand(const NeuralNetwork_Type network) {
      }
 }
 
-float *NNpredict(const NeuralNetwork_Type network, const float * input ) {
+float *NNpredict(const NeuralNetwork_Type network, const float *input ) {
 
     fprop(network,input);
     return network.out_layer;
