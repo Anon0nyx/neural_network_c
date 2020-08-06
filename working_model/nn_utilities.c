@@ -4,88 +4,74 @@
 #include <string.h>
 #include <math.h>
 
-typedef struct{
-
-    float **in; /*2D array for inputs */
-    float **tg; /*2D array for targets*/
+typedef struct {
+    float **in;  /*2D array for inputs */
+    float **tg;  /*2D array for targets*/
     int nips;    /*Number of inputs    */
     int nops;    /*Number of outputs   */
     int rows;    /*Number of rows      */
-
 }Data;
 
 
-int lns(FILE *const file){
+int lns(FILE *const file) {
 
     int ch =  EOF;
     int lines = 0;
     int pc = '\n';
-
-    while((ch = getc(file))!=EOF){
-
-        if(ch == '\n'){
+    while((ch = getc(file)) != EOF) {
+        if(ch == '\n') {
             lines++;
         }
         pc = ch;
     }
-    if(pc !='\n'){
+    if(pc != '\n') {
         lines++;
     }
     rewind(file);
     return lines;
 }
 
-char * readln(FILE * const file){
-
-    int ch =  EOF;
+char *readln(FILE *const file) {
+    int ch = EOF;
     int reads = 0;
     int size = 128;
-    char * line =  (char *)malloc((size)*sizeof(char));
-
-    while((ch =  getc(file)) != '\n' && ch !=EOF){
-
-        line[reads++] =  ch;
-        if(reads +1 == size){
-            line = (char *)realloc((line),(size *=2)*sizeof(char));
+    char *line = (char *)malloc((size)*sizeof(char));
+    while((ch = getc(file)) != '\n' && ch !=EOF) {
+        line[reads++] = ch;
+        if(reads+1 == size) {
+            line = (char *)realloc((line), (size*=2) * sizeof(char));
         }
     }
-
-    line[reads] ='\0';
+    line[reads] = '\0';
     return line;
-
-
 }
 
+float **new2d(const int rows, const int cols) {
 
-float ** new2d(const int rows, const int cols){
-
-    float **row = (float**)malloc((rows)*sizeof(float *));
-
-    for(int r=0;r<rows;r++){
-        row[r] = (float *)malloc((cols)*sizeof(float));
+    float **row = (float**)malloc((rows) * sizeof(float *));
+    for(int r=0; r < rows; r++){
+        row[r] = (float *)malloc((cols) * sizeof(float));
     }
     return row;
 }
 
-Data ndata(const int nips,const int nops, const int rows){
+Data ndata(const int nips, const int nops, const int rows) {
 
     const Data data = {
-        new2d(rows,nips),
-        new2d(rows,nops),
+        new2d(rows, nips),
+        new2d(rows, nops),
         nips,
         nops,
         rows
     };
-
     return data;
 }
 
-void parse(const Data data,char * line,const int row){
+void parse(const Data data, char *line, const int row) {
 
     const int cols = data.nips + data.nops;
-
-    for(int col =0;col<cols;col++){
-        const float val  = atof(strtok(col == 0 ? line :NULL," "));
+    for(int col=0; col < cols; col++) {
+        const float val = atof(strtok(col == 0 ? line :NULL, " "));
         if(col < data.nips)
             data.in[row][col] = val;
         else
@@ -93,9 +79,9 @@ void parse(const Data data,char * line,const int row){
     }
 }
 
-void dfree(const Data d){
+void dfree(const Data d) {
 
-    for(int row=0; row < d.rows; row++){
+    for(int row=0; row < d.rows; row++) {
         free(d.in[row]);
         free(d.tg[row]);
     }
@@ -103,12 +89,12 @@ void dfree(const Data d){
     free(d.tg);
 }
 
-void shuffle(const Data d){
+void shuffle(const Data d) {
 
-    for(int a=0; a < d.rows; a++){
-        const int b =  rand() %d.rows;
-        float * ot = d.tg[a];
-        float * it = d.in[a];
+    for(int a=0; a < d.rows; a++) {
+        const int b =  rand() % d.rows;
+        float *ot = d.tg[a];
+        float *it = d.in[a];
 
         d.tg[a] = d.tg[b];
         d.tg[b] = ot;

@@ -1,6 +1,7 @@
 #include "nn_library.c"
 
 int main() {
+
     const int nips = 256;
     const int nops = 10;
 
@@ -25,7 +26,7 @@ int main() {
             error += NNtrain(nn, in , tg, rate);
         }
 
-        printf("Error %.12f :: learning rate %f\n", (double) error / data.rows, (double) rate);
+        printf("Error %.12f :: learning rate %f\n", (double)error / data.rows, (double)rate);
         rate *= eta;
     }
 
