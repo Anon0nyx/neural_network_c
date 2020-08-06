@@ -14,10 +14,10 @@
 int main() {
   double hidden_pred_vector[HID_LEN];
   double prediction[3];
-  double in_to_hid_weight[OUT_LEN][IN_LEN] = { {-2, 9.5, 2.01}, // hid[0]
-					       {-0.8, 7.2, 6.3}, // hid[1]
-					       {-0.5, 0.45, 0.9} // hid[2]
-  };
+  double in_to_hid_weight[OUT_LEN][IN_LEN] = {  {-2, 9.5, 2.01}, // hid[0]
+					                            {-0.8, 7.2, 6.3}, // hid[1]
+					                            {-0.5, 0.45, 0.9} // hid[2]
+                                             };
 
   double hid_to_out_weight[OUT_LEN][HID_LEN] = { {-1.0, 1.15, 0.11}, // SAD
 						 {-.18, 0.15, -0.01}, // SICK
