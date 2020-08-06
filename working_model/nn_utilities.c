@@ -5,7 +5,7 @@
 #include <math.h>
 
 typedef struct {
-    float **input;         /*2D array for inputs */
+    float **input;      /*2D array for inputs */
     float **target;     /*2D array for targets*/
     int num_inputs;     /*Number of inputs    */
     int num_outputs;    /*Number of outputs   */

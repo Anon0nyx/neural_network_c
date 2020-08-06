@@ -2,18 +2,18 @@
 
 int main() {
 
-    const int nips = 256;
-    const int nops = 10;
+    const int num_inputs = 256;
+    const int num_outputs = 10;
 
     float rate = 1.0f;
     const float eta = 0.99f;
 
-    const int nhid = 28;
+    const int num_hid_layers = 28;
     const int iterations = 128;
 
-    const Data data = build("semeion.data", nips, nops);
+    const Data data = build("semeion.data", num_inputs, num_outputs);
 
-    const NeuralNetwork_Type nn = NNbuild(nips, nhid, nops);
+    const NeuralNetwork_Type network = NNbuild(num_inputs, num_hid_layers, num_outputs);
 
     for (int i = 0; i < iterations; i++) {
 
@@ -21,27 +21,27 @@ int main() {
         float error = 0.0f;
         for (int j = 0; j < data.rows; j++) {
 
-            const float *const in = data.in[j];
-            const float *const tg = data.tg[j];
-            error += NNtrain(nn, in , tg, rate);
+            const float *const input = data.input[j];
+            const float *const target = data.target[j];
+            error += NNtrain(network, input , target, rate);
         }
 
-        printf("Error %.12f :: learning rate %f\n", (double)error / data.rows, (double)rate);
+        printf("Error %.12f :: Learning Rate %f :: Epoc %d\n", (double)error / data.rows, (double)rate, (int)i+1);
         rate *= eta;
     }
 
-    NNsave(nn, "mymodel.nn");
-    NNfree(nn);
+    NNsave(network, "mymodel.network");
+    NNfree(network);
 
-    const NeuralNetwork_Type my_loaded_model = NNload("mymodel.nn");
+    const NeuralNetwork_Type my_loaded_model = NNload("mymodel.network");
 
-    const float *const in = data.in[0];
-    const float *const tg = data.tg[0];
+    const float *const input = data.input[0];
+    const float *const target = data.target[0];
 
-    const float *const pd = NNpredict(my_loaded_model, in);
+    const float *const pd = NNpredict(my_loaded_model, input);
 
-    NNprint(tg, data.nops);
-    NNprint(pd, data.nops);
+    NNprint(target, data.num_outputs);
+    NNprint(pd, data.num_outputs);
     NNfree(my_loaded_model);
     dfree(data);
 

@@ -6,16 +6,16 @@
 #include "nn_utilities.c"
 
 typedef struct {
-    float *weights; /*All weights*/
-    float *hid_layer_to_out_weights; /*hidden layer to output layer weights*/
-    float *b; /*biases*/
-    float *hid_layers; /*hidden layer*/
-    float *out_layer; /*output layer*/
-    int num_biases;   /*number of biases*/
-    int num_weights;   /*number of weights*/
-    int num_inputs; /*number of inputs*/
-    int num_hid_layers; /*number of hidden neurons*/
-    int num_outputs; /*number of outputs*/
+    float *weights;                     /*All weights*/
+    float *hid_layer_to_out_weights;    /*hidden layer to output layer weights*/
+    float *b;                           /*biases*/
+    float *hid_layers;                  /*hidden layer*/
+    float *out_layer;                   /*output layer*/
+    int num_biases;                     /*number of biases*/
+    int num_weights;                    /*number of weights*/
+    int num_inputs;                     /*number of inputs*/
+    int num_hid_layers;                 /*number of hidden neurons*/
+    int num_outputs;                    /*number of outputs*/
 }NeuralNetwork_Type;
 
 static float toterr(const float *const target,const float *const out_layer, const int size);
@@ -88,16 +88,16 @@ float *NNpredict(const NeuralNetwork_Type network, const float * input ) {
 NeuralNetwork_Type NNbuild(const int num_inputs, const int num_hid_layers, const int num_outputs) {
 
      NeuralNetwork_Type network;
-     network.num_biases = 2;                                     /*number of biases*/
-     network.num_weights =  num_hid_layers * (num_inputs +num_outputs);                  /*number of weights*/
-     network.weights =  (float *)calloc(network.num_weights,sizeof(*network.weights));  /*All weights*/
-     network.hid_layer_to_out_weights =  network.weights + num_hid_layers *num_inputs;                     /*hidden layer to output layer weights*/
-     network.b = (float *)calloc(network.num_biases,sizeof(*network.b));   /*biases*/
+     network.num_biases = 2;                                                              /*number of biases*/
+     network.num_weights =  num_hid_layers * (num_inputs +num_outputs);                   /*number of weights*/
+     network.weights =  (float *)calloc(network.num_weights,sizeof(*network.weights));    /*All weights*/
+     network.hid_layer_to_out_weights =  network.weights + num_hid_layers *num_inputs;    /*hidden layer to output layer weights*/
+     network.b = (float *)calloc(network.num_biases,sizeof(*network.b));                  /*biases*/
      network.hid_layers = (float *)calloc(num_hid_layers,sizeof(*network.hid_layers));    /*hidden layer*/
-     network.out_layer = (float *)calloc(num_outputs,sizeof(*network.out_layer));    /*output layer*/
-     network.num_inputs = num_inputs;                                /*number of inputs*/
-     network.num_hid_layers =  num_hid_layers;                               /*number of hidden neurons*/
-     network.num_outputs = num_outputs;                                /*number of outputs*/
+     network.out_layer = (float *)calloc(num_outputs,sizeof(*network.out_layer));         /*output layer*/
+     network.num_inputs = num_inputs;                                                     /*number of inputs*/
+     network.num_hid_layers =  num_hid_layers;                                            /*number of hidden neurons*/
+     network.num_outputs = num_outputs;                                                   /*number of outputs*/
      wbrand(network);
 
      return network;
