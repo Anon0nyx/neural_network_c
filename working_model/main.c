@@ -16,7 +16,6 @@ int main() {
     const NeuralNetwork_Type network = NNbuild(num_inputs, num_hid_layers, num_outputs);
 
     for (int i = 0; i < iterations; i++) {
-
         shuffle(data);
         float error = 0.0f;
         for (int j = 0; j < data.rows; j++) {
@@ -25,7 +24,6 @@ int main() {
             const float *const target = data.target[j];
             error += NNtrain(network, input , target, rate);
         }
-
         printf("Error %.12f :: Learning Rate %f :: Epoc %d\n", (double)error / data.rows, (double)rate, (int)i+1);
         rate *= eta;
     }

@@ -33,11 +33,11 @@ static void fprop(const NeuralNetwork_Type network, const float *const input) {
     /*Hidden layer neuron values*/
     for(int i=0; i < network.num_hid_layers; i++) {
         float sum = 0.0f;
-            for(int j=0; j < network.num_inputs; j++) {
-                sum += input[j] * network.weights[ i * network.num_inputs + j ];
-          }
-          network.hid_layers[i] =  act(sum + network.b[0]);
-      }
+        for(int j=0; j < network.num_inputs; j++) {
+            sum += input[j] * network.weights[ i * network.num_inputs + j ];
+        }
+        network.hid_layers[i] =  act(sum + network.b[0]);
+    }
 
     /*Output layer neuron values*/
     for(int i=0; i < network.num_outputs; i++) {
@@ -61,7 +61,6 @@ static void bprop(const NeuralNetwork_Type network,
             const float b = pdact(network.out_layer[j]);
 
             sum += a * b * network.hid_layer_to_out_weights[ j * network.num_hid_layers + i ];
-
             network.hid_layer_to_out_weights[ j * network.num_hid_layers + i ] -= rate * a * b * network.hid_layers[i];
         }
         for(int j=0; j < network.num_inputs; j++) {
@@ -70,7 +69,7 @@ static void bprop(const NeuralNetwork_Type network,
     }
 }
 
-static  void wbrand(const NeuralNetwork_Type network) {
+static void wbrand(const NeuralNetwork_Type network) {
      for(int i=0; i < network.num_weights; i++) {
          network.weights[i] = frand() - 0.5f;
      }
@@ -90,11 +89,11 @@ NeuralNetwork_Type NNbuild(const int num_inputs, const int num_hid_layers, const
      NeuralNetwork_Type network;
      network.num_biases = 2;                                                              /*number of biases*/
      network.num_weights =  num_hid_layers * (num_inputs +num_outputs);                   /*number of weights*/
-     network.weights =  (float *)calloc(network.num_weights,sizeof(*network.weights));    /*All weights*/
+     network.weights =  (float *)calloc(network.num_weights, sizeof(*network.weights));    /*All weights*/
      network.hid_layer_to_out_weights =  network.weights + num_hid_layers *num_inputs;    /*hidden layer to output layer weights*/
-     network.b = (float *)calloc(network.num_biases,sizeof(*network.b));                  /*biases*/
-     network.hid_layers = (float *)calloc(num_hid_layers,sizeof(*network.hid_layers));    /*hidden layer*/
-     network.out_layer = (float *)calloc(num_outputs,sizeof(*network.out_layer));         /*output layer*/
+     network.b = (float *)calloc(network.num_biases, sizeof(*network.b));                  /*biases*/
+     network.hid_layers = (float *)calloc(num_hid_layers, sizeof(*network.hid_layers));    /*hidden layer*/
+     network.out_layer = (float *)calloc(num_outputs, sizeof(*network.out_layer));         /*output layer*/
      network.num_inputs = num_inputs;                                                     /*number of inputs*/
      network.num_hid_layers =  num_hid_layers;                                            /*number of hidden neurons*/
      network.num_outputs = num_outputs;                                                   /*number of outputs*/
@@ -157,18 +156,15 @@ void NNprint(const float *arr, const int size) {
 
     double max =  0.0f;
     int idx;
-
     for(int i=0; i < size; i++) {
-
         printf("%f ", (double)arr[i]);
-
         if(arr[i] > max) {
             idx = i;
             max = arr[i];
         }
     }
     printf("\n");
-    printf("The number is :%d\n",idx);
+    printf("The number is : %d\n", idx);
 }
 
 void NNfree(const NeuralNetwork_Type network) {
@@ -192,12 +188,10 @@ Data build(const char *path, const int num_inputs, const int num_outputs) {
 
     FILE *file = fopen(path, "r");
     if(file == NULL) {
-        printf("Could not open %s\n", path);
-        printf("Dataset does not exist \n");
+        printf("Could not open %s.\n", path);
+        printf("Dataset does not exist.\n");
         exit(1);
     }
-
-
     const int rows = lns(file);
     Data data = ndata(num_inputs, num_outputs, rows);
 

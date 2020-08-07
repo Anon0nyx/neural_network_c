@@ -15,7 +15,7 @@ typedef struct {
 
 int lns(FILE *const file) {
 
-    int ch =  EOF;
+    int ch = EOF;
     int lines = 0;
     int pc = '\n';
     while((ch = getc(file)) != EOF) {
@@ -32,6 +32,7 @@ int lns(FILE *const file) {
 }
 
 char *readln(FILE *const file) {
+
     int ch = EOF;
     int reads = 0;
     int size = 128;
