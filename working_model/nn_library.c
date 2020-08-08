@@ -21,10 +21,10 @@ typedef struct {
 static float toterr(const float *const target,const float *const out_layer, const int size);
 
 // One line functions
-static float err(const float a, const float b) { return 0.5f * (a-b) * (a-b); }
-static float pderr(const float a, const float b) { return a - b; }
-static float act(const float a) { return 1.0f / (1.0f + expf(-a)); }
-static float pdact(const float a ) { return a * (1.0f - a); }
+static float err(const float actual, const float predicted) { return 0.5f * (actual - predicted) * (actual - predicted); }
+static float pd_err(const float a, const float b) { return a - b; }
+static float sigmoid_activation(const float a) { return 1.0f / (1.0f + expf(-a)); } // Sigmoid activation function
+static float pd_sigmoid_act(const float a) { return a * (1.0f - a); } // Partial derivative of sigmoid activation function
 static float frand() { return rand() / (float)RAND_MAX; }
 
 
@@ -36,7 +36,7 @@ static void fprop(const NeuralNetwork_Type network, const float *const input) {
         for(int j=0; j < network.num_inputs; j++) {
             sum += input[j] * network.weights[ i * network.num_inputs + j ];
         }
-        network.hid_layers[i] =  act(sum + network.b[0]);
+        network.hid_layers[i] =  sigmoid_activation(sum + network.b[0]);
     }
 
     /*Output layer neuron values*/
@@ -45,7 +45,7 @@ static void fprop(const NeuralNetwork_Type network, const float *const input) {
         for(int j=0; j < network.num_hid_layers; j++) {
             sum += network.hid_layers[j] * network.hid_layer_to_out_weights[ i * network.num_hid_layers + j ];
         }
-        network.out_layer[i] = act(sum+network.b[1]);
+        network.out_layer[i] = sigmoid_activation(sum+network.b[1]);
     }
 }
 
@@ -57,14 +57,14 @@ static void bprop(const NeuralNetwork_Type network,
     for(int i=0; i < network.num_hid_layers; i++) {
         float sum = 0.0f;
         for(int j=0; j < network.num_outputs; j++) {
-            const float a = pderr(network.out_layer[j],target[j]);
-            const float b = pdact(network.out_layer[j]);
+            const float a = pd_err(network.out_layer[j],target[j]);
+            const float b = partial_derivative_activation_fun(network.out_layer[j]);
 
             sum += a * b * network.hid_layer_to_out_weights[ j * network.num_hid_layers + i ];
             network.hid_layer_to_out_weights[ j * network.num_hid_layers + i ] -= rate * a * b * network.hid_layers[i];
         }
         for(int j=0; j < network.num_inputs; j++) {
-            network.weights[ i * network.num_inputs + j ] -= rate * sum * pdact(network.hid_layers[i]) * input[j];
+            network.weights[ i * network.num_inputs + j ] -= rate * sum * partial_derivative_activation_fun(network.hid_layers[i]) * input[j];
         }
     }
 }
