@@ -58,13 +58,13 @@ static void bprop(const NeuralNetwork_Type network,
         float sum = 0.0f;
         for(int j=0; j < network.num_outputs; j++) {
             const float a = pd_err(network.out_layer[j],target[j]);
-            const float b = partial_derivative_activation_fun(network.out_layer[j]);
+            const float b = pd_sigmoid_act(network.out_layer[j]);
 
             sum += a * b * network.hid_layer_to_out_weights[ j * network.num_hid_layers + i ];
             network.hid_layer_to_out_weights[ j * network.num_hid_layers + i ] -= rate * a * b * network.hid_layers[i];
         }
         for(int j=0; j < network.num_inputs; j++) {
-            network.weights[ i * network.num_inputs + j ] -= rate * sum * partial_derivative_activation_fun(network.hid_layers[i]) * input[j];
+            network.weights[ i * network.num_inputs + j ] -= rate * sum * pd_sigmoid_act(network.hid_layers[i]) * input[j];
         }
     }
 }
@@ -86,20 +86,20 @@ float *NNpredict(const NeuralNetwork_Type network, const float *input ) {
 
 NeuralNetwork_Type NNbuild(const int num_inputs, const int num_hid_layers, const int num_outputs) {
 
-     NeuralNetwork_Type network;
-     network.num_biases = 2;                                                              /*number of biases*/
-     network.num_weights =  num_hid_layers * (num_inputs +num_outputs);                   /*number of weights*/
-     network.weights =  (float *)calloc(network.num_weights, sizeof(*network.weights));    /*All weights*/
-     network.hid_layer_to_out_weights =  network.weights + num_hid_layers *num_inputs;    /*hidden layer to output layer weights*/
-     network.b = (float *)calloc(network.num_biases, sizeof(*network.b));                  /*biases*/
-     network.hid_layers = (float *)calloc(num_hid_layers, sizeof(*network.hid_layers));    /*hidden layer*/
-     network.out_layer = (float *)calloc(num_outputs, sizeof(*network.out_layer));         /*output layer*/
-     network.num_inputs = num_inputs;                                                     /*number of inputs*/
-     network.num_hid_layers =  num_hid_layers;                                            /*number of hidden neurons*/
-     network.num_outputs = num_outputs;                                                   /*number of outputs*/
-     wbrand(network);
+    NeuralNetwork_Type network;
+    network.num_biases = 2;                                                              /*number of biases*/
+    network.num_weights =  num_hid_layers * (num_inputs +num_outputs);                   /*number of weights*/
+    network.weights =  (float *)calloc(network.num_weights, sizeof(*network.weights));    /*All weights*/
+    network.hid_layer_to_out_weights =  network.weights + num_hid_layers *num_inputs;    /*hidden layer to output layer weights*/
+    network.b = (float *)calloc(network.num_biases, sizeof(*network.b));                  /*biases*/
+    network.hid_layers = (float *)calloc(num_hid_layers, sizeof(*network.hid_layers));    /*hidden layer*/
+    network.out_layer = (float *)calloc(num_outputs, sizeof(*network.out_layer));         /*output layer*/
+    network.num_inputs = num_inputs;                                                     /*number of inputs*/
+    network.num_hid_layers =  num_hid_layers;                                            /*number of hidden neurons*/
+    network.num_outputs = num_outputs;                                                   /*number of outputs*/
+    wbrand(network);
 
-     return network;
+    return network;
 }
 
 void NNsave(const NeuralNetwork_Type network, const char *path) {
